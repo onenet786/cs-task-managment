@@ -1,0 +1,6 @@
+- [x] Analyze project structure for database-related files
+- [x] Check configuration files for database connections
+- [x] Examine service files for database implementations
+- [x] Look for SQLite, MySQL, or other database configurations
+- [x] Identify database location and connection details
+- [x] Provide database access information to user
