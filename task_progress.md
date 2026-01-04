@@ -3,4 +3,6 @@
 - [x] Examine service files for database implementations
 - [x] Look for SQLite, MySQL, or other database configurations
 - [x] Identify database location and connection details
+- [x] Create MySQL database schema based on Flutter models
+- [x] Create database setup guide for user
 - [x] Provide database access information to user
