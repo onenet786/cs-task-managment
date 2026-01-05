@@ -12,8 +12,6 @@ class CustomerDashboardView extends StatefulWidget {
 }
 
 class _CustomerDashboardViewState extends State<CustomerDashboardView> {
-  final NavigationService _navigationService = NavigationService();
-
   @override
   void initState() {
     super.initState();
@@ -33,6 +31,7 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
     final complaintViewModel = Provider.of<ComplaintViewModel>(context);
+    final navigationService = Provider.of<NavigationService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +41,7 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await authViewModel.logout();
-              await _navigationService.navigateAndRemoveUntil('/login');
+              await navigationService.navigateAndRemoveUntil('/login');
             },
           ),
         ],
@@ -101,14 +100,14 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
                   icon: Icons.add,
                   title: 'New Complaint',
                   onTap: () {
-                    _navigationService.navigateTo('/create-complaint');
+                    navigationService.navigateTo('/create-complaint');
                   },
                 ),
                 _buildActionCard(
                   icon: Icons.list,
                   title: 'My Complaints',
                   onTap: () {
-                    _navigationService.navigateTo('/my-complaints');
+                    navigationService.navigateTo('/my-complaints');
                   },
                 ),
               ],
@@ -138,7 +137,7 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
                         itemCount: complaintViewModel.myComplaints.length,
                         itemBuilder: (context, index) {
                           final complaint = complaintViewModel.myComplaints[index];
-                          return _buildComplaintCard(complaint);
+                          return _buildComplaintCard(complaint, navigationService);
                         },
                       ),
           ],
@@ -146,7 +145,7 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigationService.navigateTo('/create-complaint');
+          navigationService.navigateTo('/create-complaint');
         },
         child: const Icon(Icons.add),
       ),
@@ -180,14 +179,14 @@ class _CustomerDashboardViewState extends State<CustomerDashboardView> {
     );
   }
 
-  Widget _buildComplaintCard(dynamic complaint) {
+  Widget _buildComplaintCard(dynamic complaint, NavigationService navigationService) {
     return Card(
       child: ListTile(
         title: Text(complaint.title),
         subtitle: Text(complaint.status),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
-          _navigationService.navigateToWithData(
+          navigationService.navigateToWithData(
             '/complaint-details',
             complaint.id,
           );

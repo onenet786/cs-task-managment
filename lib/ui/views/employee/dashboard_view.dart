@@ -12,8 +12,6 @@ class EmployeeDashboardView extends StatefulWidget {
 }
 
 class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
-  final NavigationService _navigationService = NavigationService();
-
   @override
   void initState() {
     super.initState();
@@ -33,6 +31,7 @@ class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
     final complaintViewModel = Provider.of<ComplaintViewModel>(context);
+    final navigationService = Provider.of<NavigationService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +41,7 @@ class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await authViewModel.logout();
-              await _navigationService.navigateAndRemoveUntil('/login');
+              await navigationService.navigateAndRemoveUntil('/login');
             },
           ),
         ],
@@ -144,7 +143,7 @@ class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
                         itemCount: complaintViewModel.assignedComplaints.length,
                         itemBuilder: (context, index) {
                           final complaint = complaintViewModel.assignedComplaints[index];
-                          return _buildComplaintCard(complaint);
+                          return _buildComplaintCard(complaint, navigationService);
                         },
                       ),
           ],
@@ -186,7 +185,7 @@ class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
     );
   }
 
-  Widget _buildComplaintCard(dynamic complaint) {
+  Widget _buildComplaintCard(dynamic complaint, NavigationService navigationService) {
     Color statusColor;
     switch (complaint.status) {
       case 'pending':
@@ -227,7 +226,7 @@ class _EmployeeDashboardViewState extends State<EmployeeDashboardView> {
           ),
         ),
         onTap: () {
-          _navigationService.navigateToWithData(
+          navigationService.navigateToWithData(
             '/employee-complaint-details',
             complaint.id,
           );

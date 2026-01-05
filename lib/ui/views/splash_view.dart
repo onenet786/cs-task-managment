@@ -11,8 +11,6 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  final NavigationService _navigationService = NavigationService();
-
   @override
   void initState() {
     super.initState();
@@ -20,27 +18,36 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _checkAuthentication() async {
-    await Future.delayed(const Duration(seconds: 2));
-    
-    if (!mounted) return;
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final isLoggedIn = await authService.isLoggedIn();
-    
-    if (isLoggedIn) {
-      final user = await authService.getCurrentUser();
-      if (user != null) {
-        if (user.isAdmin) {
-          _navigationService.navigateTo('/admin-dashboard');
-        } else if (user.isEmployee) {
-          _navigationService.navigateTo('/employee-dashboard');
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      
+      if (!mounted) return;
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final navigationService = Provider.of<NavigationService>(context, listen: false);
+      
+      final isLoggedIn = await authService.isLoggedIn();
+      
+      if (isLoggedIn) {
+        final user = await authService.getCurrentUser();
+        if (user != null) {
+          if (user.isAdmin) {
+            navigationService.navigateTo('/admin-dashboard');
+          } else if (user.isEmployee) {
+            navigationService.navigateTo('/employee-dashboard');
+          } else {
+            navigationService.navigateTo('/customer-dashboard');
+          }
         } else {
-          _navigationService.navigateTo('/customer-dashboard');
+          navigationService.navigateTo('/login');
         }
       } else {
-        _navigationService.navigateTo('/login');
+        navigationService.navigateTo('/login');
       }
-    } else {
-      _navigationService.navigateTo('/login');
+    } catch (e) {
+      if (mounted) {
+        final navigationService = Provider.of<NavigationService>(context, listen: false);
+        navigationService.navigateTo('/login');
+      }
     }
   }
 

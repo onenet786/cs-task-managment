@@ -13,8 +13,6 @@ class AdminDashboardView extends StatefulWidget {
 }
 
 class _AdminDashboardViewState extends State<AdminDashboardView> {
-  final NavigationService _navigationService = NavigationService();
-
   @override
   void initState() {
     super.initState();
@@ -36,6 +34,7 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
     final authViewModel = Provider.of<AuthViewModel>(context);
     final complaintViewModel = Provider.of<ComplaintViewModel>(context);
     final userViewModel = Provider.of<UserViewModel>(context);
+    final navigationService = Provider.of<NavigationService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +44,7 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await authViewModel.logout();
-              await _navigationService.navigateAndRemoveUntil('/login');
+              await navigationService.navigateAndRemoveUntil('/login');
             },
           ),
         ],
@@ -154,28 +153,28 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
                   icon: Icons.people,
                   title: 'Manage Users',
                   onTap: () {
-                    _navigationService.navigateTo('/manage-users');
+                    navigationService.navigateTo('/manage-users');
                   },
                 ),
                 _buildActionCard(
                   icon: Icons.list_alt,
                   title: 'Manage Complaints',
                   onTap: () {
-                    _navigationService.navigateTo('/manage-complaints');
+                    navigationService.navigateTo('/manage-complaints');
                   },
                 ),
                 _buildActionCard(
                   icon: Icons.analytics,
                   title: 'Reports',
                   onTap: () {
-                    _navigationService.navigateTo('/reports');
+                    navigationService.navigateTo('/reports');
                   },
                 ),
                 _buildActionCard(
                   icon: Icons.settings,
                   title: 'Settings',
                   onTap: () {
-                    _navigationService.navigateTo('/settings');
+                    navigationService.navigateTo('/settings');
                   },
                 ),
               ],
@@ -205,7 +204,7 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
                         itemCount: complaintViewModel.allComplaints.length > 5 ? 5 : complaintViewModel.allComplaints.length,
                         itemBuilder: (context, index) {
                           final complaint = complaintViewModel.allComplaints[index];
-                          return _buildComplaintCard(complaint);
+                          return _buildComplaintCard(complaint, navigationService);
                         },
                       ),
           ],
@@ -275,7 +274,7 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
     );
   }
 
-  Widget _buildComplaintCard(dynamic complaint) {
+  Widget _buildComplaintCard(dynamic complaint, NavigationService navigationService) {
     Color statusColor;
     switch (complaint.status) {
       case 'pending':
@@ -316,7 +315,7 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
           ),
         ),
         onTap: () {
-          _navigationService.navigateToWithData(
+          navigationService.navigateToWithData(
             '/complaint-details',
             complaint.id,
           );
