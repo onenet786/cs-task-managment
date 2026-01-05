@@ -85,46 +85,50 @@ class MyApp extends StatelessWidget {
           create: (_) => ReportViewModel(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Customer Task Management',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        navigatorKey: Provider.of<NavigationService>(context, listen: false).navigatorKey,
-        home: const SplashView(),
-        routes: {
-          // Auth Routes
-          '/login': (context) => const LoginView(),
-          '/register': (context) => const RegisterView(),
-          '/verify-email': (context) => const VerifyEmailView(),
-          '/forgot-password': (context) => const ForgotPasswordView(),
-          
-          // Customer Routes
-          '/customer-dashboard': (context) => const CustomerDashboardView(),
-          '/create-complaint': (context) => const CreateComplaintView(),
-          '/complaint-details': (context) {
-            final complaintId = ModalRoute.of(context)?.settings.arguments as int?;
-            return ComplaintDetailsView(complaintId: complaintId ?? 0);
-          },
-          '/my-complaints': (context) => const MyComplaintsView(),
-          
-          // Employee Routes
-          '/employee-dashboard': (context) => const EmployeeDashboardView(),
-          '/assigned-complaints': (context) => const AssignedComplaintsView(),
-          '/employee-complaint-details': (context) => const EmployeeComplaintDetailsView(),
-          '/update-status': (context) => const UpdateStatusView(),
-          
-          // Admin Routes
-          '/admin-dashboard': (context) => const AdminDashboardView(),
-          '/manage-users': (context) => const ManageUsersView(),
-          '/manage-complaints': (context) => const ManageComplaintsView(),
-          '/reports': (context) => const ReportsView(),
-          '/settings': (context) => const SettingsView(),
-        },
-        builder: (context, child) {
-          return CustomDialog(
-            child: child!,
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            title: 'Customer Task Management',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            navigatorKey: Provider.of<NavigationService>(context, listen: false).navigatorKey,
+            home: const SplashView(),
+            routes: {
+              // Auth Routes
+              '/login': (context) => const LoginView(),
+              '/register': (context) => const RegisterView(),
+              '/verify-email': (context) => const VerifyEmailView(),
+              '/forgot-password': (context) => const ForgotPasswordView(),
+              
+              // Customer Routes
+              '/customer-dashboard': (context) => const CustomerDashboardView(),
+              '/create-complaint': (context) => const CreateComplaintView(),
+              '/complaint-details': (context) {
+                final complaintId = ModalRoute.of(context)?.settings.arguments as int?;
+                return ComplaintDetailsView(complaintId: complaintId ?? 0);
+              },
+              '/my-complaints': (context) => const MyComplaintsView(),
+              
+              // Employee Routes
+              '/employee-dashboard': (context) => const EmployeeDashboardView(),
+              '/assigned-complaints': (context) => const AssignedComplaintsView(),
+              '/employee-complaint-details': (context) => const EmployeeComplaintDetailsView(),
+              '/update-status': (context) => const UpdateStatusView(),
+              
+              // Admin Routes
+              '/admin-dashboard': (context) => const AdminDashboardView(),
+              '/manage-users': (context) => const ManageUsersView(),
+              '/manage-complaints': (context) => const ManageComplaintsView(),
+              '/reports': (context) => const ReportsView(),
+              '/settings': (context) => const SettingsView(),
+            },
+            builder: (context, child) {
+              return CustomDialog(
+                child: child!,
+              );
+            },
           );
         },
       ),
